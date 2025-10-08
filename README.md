@@ -1,4 +1,4 @@
-# Kiwi Market - Second-hand Trading Platform
+# 🥝 Kiwi Market - Second-hand Trading Platform
 
 A full-stack second-hand trading platform built for New Zealand, featuring a React frontend and Spring Boot backend with comprehensive trading features.
 
@@ -13,243 +13,231 @@ A full-stack second-hand trading platform built for New Zealand, featuring a Rea
 - **Image Upload**: S3-compatible object storage with presigned URLs
 - **Payment Integration**: Stripe integration for secure transactions
 - **Reviews & Ratings**: Post-transaction feedback system
+- **Admin Panel**: Comprehensive admin dashboard for platform management
 
 ### New Zealand Localization
-- **Currency**: NZD (New Zealand Dollar)
-- **Timezone**: Pacific/Auckland
-- **GST Support**: Configurable tax calculation
-- **Local Categories**: Tailored for NZ market
-- **Bilingual**: English and Chinese support
-
-### Technical Features
-- **Responsive Design**: Mobile-first approach
-- **Real-time Updates**: WebSocket communication
-- **Image Optimization**: Automatic resizing and compression
-- **Search**: Full-text search with PostgreSQL
-- **Caching**: Redis for session and data caching
-- **Security**: JWT authentication, input validation, CORS
-- **Monitoring**: Health checks and metrics
+- **Currency**: NZD (New Zealand Dollar) support
+- **Timezone**: Pacific/Auckland timezone
+- **GST**: Configurable GST calculation
+- **Compliance**: Built-in compliance features for NZ regulations
 
 ## 🏗️ Architecture
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   React SPA     │    │  Spring Boot    │    │   PostgreSQL    │
-│   (Frontend)    │◄──►│   (Backend)     │◄──►│   (Database)    │
-│   Port: 3000    │    │   Port: 8080    │    │   Port: 5432    │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         │                       │                       │
-         ▼                       ▼                       ▼
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│     Nginx       │    │      Redis      │    │     MinIO       │
-│  (Reverse Proxy)│    │    (Cache)      │    │ (Object Store)  │
-│   Port: 80      │    │   Port: 6379    │    │   Port: 9000    │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-```
+### Backend (Spring Boot)
+- **Framework**: Spring Boot 3.x with Java 17
+- **Security**: Spring Security with JWT authentication
+- **Database**: PostgreSQL with JPA/Hibernate
+- **Caching**: Redis for session management and caching
+- **File Storage**: S3-compatible storage (MinIO locally, AWS S3 production)
+- **Real-time**: WebSocket with STOMP for chat functionality
+- **Payment**: Stripe integration for secure payments
+- **API Documentation**: OpenAPI/Swagger 3
 
-## 🛠️ Tech Stack
+### Frontend (React)
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite for fast development and building
+- **Styling**: TailwindCSS for responsive design
+- **Routing**: React Router DOM for navigation
+- **State Management**: React Query for server state
+- **UI Components**: Custom components with shadcn/ui
+- **Internationalization**: i18next for Chinese/English support
 
-### Frontend
-- **React 18** with TypeScript
-- **Vite** for build tooling
-- **TailwindCSS** for styling
-- **React Router** for navigation
-- **Lucide React** for icons
+## 🛠️ Technology Stack
 
-### Backend
-- **Java 17** with Spring Boot 3.x
-- **Spring Security** with JWT
-- **Spring Data JPA** with Hibernate
-- **PostgreSQL** database
-- **Redis** for caching
-- **WebSocket** for real-time chat
-- **Stripe** for payments
-- **MinIO/S3** for file storage
+### Backend Technologies
+- Java 17
+- Spring Boot 3.x
+- Spring Security
+- Spring Data JPA
+- PostgreSQL
+- Redis
+- JWT (JSON Web Tokens)
+- MapStruct
+- Flyway
+- Stripe API
+- WebSocket (STOMP)
+- OpenAPI/Swagger 3
 
-### DevOps
-- **Docker** & Docker Compose
-- **Nginx** reverse proxy
-- **Flyway** database migrations
-- **GitHub Actions** CI/CD
+### Frontend Technologies
+- React 18
+- TypeScript
+- Vite
+- TailwindCSS
+- React Router DOM
+- React Query (TanStack Query)
+- i18next
+- Zod (form validation)
+
+### DevOps & Deployment
+- Docker & Docker Compose
+- Nginx (reverse proxy)
+- GitHub Actions (CI/CD)
+- MinIO (local S3)
+- AWS S3 (production)
 
 ## 🚀 Quick Start
 
 ### Prerequisites
+- Java 17+
+- Node.js 18+
 - Docker & Docker Compose
-- Node.js 18+ (for local development)
-- Java 17+ (for local development)
+- Maven 3.6+
 
-### Using Docker (Recommended)
+### Development Setup
 
 1. **Clone the repository**
-```bash
-git clone <repository-url>
-cd nz-market
-```
+   ```bash
+   git clone https://github.com/zquanx/nz-market.git
+   cd nz-market
+   ```
 
-2. **Start all services**
-```bash
-docker-compose up -d
-```
+2. **Start with Docker (Recommended)**
+   ```bash
+   # Make the start script executable
+   chmod +x start.sh
+   
+   # Start development environment
+   ./start.sh dev
+   ```
 
-3. **Access the application**
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8080/api
-- API Documentation: http://localhost:8080/api/swagger-ui
-- MinIO Console: http://localhost:9001 (minio/minio_secret)
-
-### Local Development
-
-#### Frontend
-```bash
-cd nz-market-frontend
-pnpm install
-pnpm dev
-```
-
-#### Backend
-```bash
-cd nz-market-backend
-./mvnw spring-boot:run
-```
-
-## 📁 Project Structure
-
-```
-nz-market/
-├── nz-market-frontend/          # React frontend
-│   ├── src/
-│   │   ├── components/         # Reusable components
-│   │   ├── pages/             # Page components
-│   │   ├── data/              # Mock data
-│   │   ├── types/             # TypeScript types
-│   │   └── styles/            # Global styles
-│   ├── Dockerfile
-│   └── package.json
-├── nz-market-backend/           # Spring Boot backend
-│   ├── src/main/java/
-│   │   ├── auth/              # Authentication
-│   │   ├── items/             # Item management
-│   │   ├── chat/              # Chat functionality
-│   │   ├── orders/            # Order management
-│   │   ├── uploads/           # File upload
-│   │   └── common/            # Shared utilities
-│   ├── src/main/resources/
-│   │   ├── db/migration/      # Database migrations
-│   │   └── application.yml    # Configuration
-│   └── Dockerfile
-├── docker-compose.yml          # Container orchestration
-└── README.md
-```
-
-## 🔧 Configuration
+3. **Manual Setup**
+   
+   **Backend:**
+   ```bash
+   cd nz-market-backend
+   mvn clean install
+   mvn spring-boot:run
+   ```
+   
+   **Frontend:**
+   ```bash
+   cd nz-market-frontend
+   npm install
+   npm run dev
+   ```
 
 ### Environment Variables
 
-Create a `.env` file in the project root:
+Create `.env` files based on the examples:
 
+**Backend** (`nz-market-backend/.env`):
 ```env
 # Database
-DB_URL=jdbc:postgresql://localhost:5432/market
-DB_USER=market
-DB_PASSWORD=market
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=nz_market
+DB_USERNAME=postgres
+DB_PASSWORD=password
 
 # Redis
 REDIS_HOST=localhost
 REDIS_PORT=6379
 
 # JWT
-JWT_SECRET=your-super-secret-jwt-key
+JWT_SECRET=your-secret-key
+JWT_ACCESS_EXPIRATION=3600000
+JWT_REFRESH_EXPIRATION=86400000
 
 # S3/MinIO
 S3_ENDPOINT=http://localhost:9000
-S3_BUCKET=market-uploads
-S3_ACCESS_KEY=minio
-S3_SECRET_KEY=minio_secret
+S3_ACCESS_KEY=minioadmin
+S3_SECRET_KEY=minioadmin
+S3_BUCKET=nz-market
 
 # Stripe
-STRIPE_SECRET_KEY=sk_test_xxx
-STRIPE_PUBLISHABLE_KEY=pk_test_xxx
-
-# Application
-CURRENCY=NZD
-TZ=Pacific/Auckland
-TAX_ENABLED=false
-TAX_RATE=0.15
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
 ```
 
-## 🧪 Testing
+## 📱 Application URLs
 
-### Frontend Tests
-```bash
-cd nz-market-frontend
-pnpm test
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8080
+- **API Documentation**: http://localhost:8080/swagger-ui.html
+- **MinIO Console**: http://localhost:9001
+
+## 🗂️ Project Structure
+
+```
+nz-market/
+├── nz-market-backend/          # Spring Boot backend
+│   ├── src/main/java/
+│   │   └── nz/co/market/
+│   │       ├── auth/           # Authentication & authorization
+│   │       ├── items/          # Item management
+│   │       ├── chat/           # Real-time messaging
+│   │       ├── orders/         # Order & payment processing
+│   │       ├── uploads/        # File upload handling
+│   │       └── admin/          # Admin panel
+│   └── src/main/resources/
+│       └── db/migration/       # Database migrations
+├── nz-market-frontend/         # React frontend
+│   ├── src/
+│   │   ├── components/         # Reusable components
+│   │   ├── pages/              # Page components
+│   │   ├── data/               # Mock data
+│   │   └── styles/             # Global styles
+│   └── public/
+├── docker-compose.yml          # Production setup
+├── docker-compose.dev.yml      # Development setup
+└── start.sh                    # Startup script
 ```
 
-### Backend Tests
+## 🔧 Development
+
+### Backend Development
 ```bash
 cd nz-market-backend
-./mvnw test
+mvn spring-boot:run
 ```
 
-### Integration Tests
+### Frontend Development
 ```bash
-docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+cd nz-market-frontend
+npm run dev
 ```
 
-## 📊 API Documentation
+### Running Tests
+```bash
+# Backend tests
+cd nz-market-backend
+mvn test
 
-Once the backend is running, visit:
-- **Swagger UI**: http://localhost:8080/api/swagger-ui
-- **OpenAPI JSON**: http://localhost:8080/api/v3/api-docs
-
-## 🔐 Security
-
-- JWT-based authentication
-- Password hashing with BCrypt
-- Input validation and sanitization
-- CORS configuration
-- Rate limiting
-- SQL injection prevention
-- XSS protection
-
-## 🌍 Internationalization
-
-The platform supports:
-- **English** (default)
-- **Chinese** (中文)
-
-Language preferences are stored in localStorage and persist across sessions.
-
-## 📱 Mobile Support
-
-- Responsive design for all screen sizes
-- Touch-friendly interface
-- Progressive Web App (PWA) ready
-- Mobile-optimized image uploads
+# Frontend tests
+cd nz-market-frontend
+npm test
+```
 
 ## 🚀 Deployment
 
 ### Production Deployment
+```bash
+# Build and start production environment
+docker-compose up -d
+```
 
-1. **Set production environment variables**
-2. **Build and push Docker images**
-3. **Deploy using Docker Compose or Kubernetes**
-4. **Configure SSL certificates**
-5. **Set up monitoring and logging**
+### Environment Configuration
+- Update environment variables in `docker-compose.yml`
+- Configure Nginx reverse proxy
+- Set up SSL certificates
+- Configure domain names
 
-### Environment-specific configurations
+## 📊 API Documentation
 
-- **Development**: Hot reload, debug logging
-- **Staging**: Production-like with test data
-- **Production**: Optimized builds, security hardening
+The API documentation is available at `/swagger-ui.html` when the backend is running. It includes:
+
+- Authentication endpoints
+- Item management APIs
+- Chat and messaging APIs
+- Order and payment APIs
+- Admin panel APIs
+- File upload APIs
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
@@ -259,18 +247,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Built for the New Zealand second-hand market
-- Inspired by popular trading platforms
-- Uses modern web technologies and best practices
-- Designed with accessibility and usability in mind
+- Spring Boot team for the excellent framework
+- React team for the powerful frontend library
+- TailwindCSS for the utility-first CSS framework
+- All contributors and testers
 
 ## 📞 Support
 
-For support and questions:
-- Create an issue in the repository
-- Check the documentation
-- Review the API documentation
+For support, email support@kiwimarket.nz or create an issue in the GitHub repository.
 
 ---
 
-**Made with ❤️ in New Zealand**
+**Built with ❤️ for New Zealand's second-hand trading community**
