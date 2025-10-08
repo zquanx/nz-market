@@ -1,0 +1,35 @@
+{
+  "name": "kiwi-market-tests",
+  "version": "1.0.0",
+  "description": "Kiwi Market 二手商品交易平台自动化测试",
+  "scripts": {
+    "test": "playwright test",
+    "test:auth": "playwright test user-registration-test.js",
+    "test:items": "playwright test item-management-test.js",
+    "test:chat": "playwright test chat-order-test.js --grep '聊天'",
+    "test:orders": "playwright test chat-order-test.js --grep '订单'",
+    "test:api": "playwright test --grep 'API'",
+    "test:e2e": "playwright test --grep '流程'",
+    "test:smoke": "playwright test --grep '冒烟'",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "test:install": "playwright install",
+    "test:all": "./run-tests.sh all",
+    "test:clean": "rm -rf test-results/ && rm -rf playwright-report/"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "automation",
+    "e2e",
+    "kiwi-market",
+    "second-hand-trading"
+  ],
+  "author": "Kiwi Market Team",
+  "license": "MIT"
+}
