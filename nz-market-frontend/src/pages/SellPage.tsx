@@ -12,6 +12,7 @@ import {
   Minus
 } from 'lucide-react';
 import { categories, conditions } from '../data/mockItems';
+import { getCategoryTranslation, getConditionTranslation } from '../data/categoryTranslations';
 
 interface SellPageProps {
   language: 'en' | 'zh';
@@ -227,7 +228,7 @@ const SellPage: React.FC<SellPageProps> = ({ language }) => {
                 >
                   <option value="">{language === 'en' ? 'Select category' : '选择分类'}</option>
                   {categories.slice(1).map(category => (
-                    <option key={category} value={category}>{category}</option>
+                    <option key={category} value={category}>{getCategoryTranslation(category, language)}</option>
                   ))}
                 </select>
               </div>
@@ -244,7 +245,7 @@ const SellPage: React.FC<SellPageProps> = ({ language }) => {
                   <option value="">{language === 'en' ? 'Select condition' : '选择成色'}</option>
                   {conditions.map(condition => (
                     <option key={condition.value} value={condition.value}>
-                      {condition.label}
+                      {getConditionTranslation(condition.value, language)}
                     </option>
                   ))}
                 </select>

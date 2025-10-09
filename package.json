@@ -4,7 +4,11 @@
   "description": "Kiwi Market 二手商品交易平台自动化测试",
   "scripts": {
     "test": "playwright test",
-    "test:auth": "playwright test user-registration-test.js",
+    "test:auth": "./run-auth-tests.sh",
+    "test:auth:frontend": "./run-auth-tests.sh --frontend",
+    "test:auth:api": "./run-auth-tests.sh --api",
+    "test:auth:headed": "./run-auth-tests.sh --headed",
+    "test:auth:debug": "./run-auth-tests.sh --debug",
     "test:items": "playwright test item-management-test.js",
     "test:chat": "playwright test chat-order-test.js --grep '聊天'",
     "test:orders": "playwright test chat-order-test.js --grep '订单'",

@@ -11,6 +11,7 @@ nz/co/market/chat/dto/ConversationResponse$MessageDto.class
 nz/co/market/auth/enums/UserRole.class
 nz/co/market/auth/controller/AuthController.class
 nz/co/market/orders/entity/Order.class
+nz/co/market/items/entity/Favorite$FavoriteBuilder.class
 nz/co/market/items/entity/Category$CategoryBuilder.class
 nz/co/market/uploads/controller/UploadController.class
 nz/co/market/items/repository/ItemRepository.class
@@ -41,6 +42,7 @@ nz/co/market/chat/service/ChatService.class
 nz/co/market/items/dto/ItemResponse$CategoryDto$CategoryDtoBuilder.class
 nz/co/market/auth/config/JwtConfig.class
 nz/co/market/auth/entity/User.class
+nz/co/market/items/entity/Favorite.class
 nz/co/market/items/dto/ItemSearchRequest.class
 nz/co/market/auth/security/JwtAuthenticationEntryPoint.class
 nz/co/market/auth/entity/PasswordResetToken.class
@@ -80,8 +82,10 @@ nz/co/market/items/dto/ItemResponse.class
 nz/co/market/orders/dto/OrderResponse$PaymentDto.class
 nz/co/market/orders/entity/Payment$PaymentBuilder.class
 nz/co/market/chat/mapper/ChatMapper.class
+nz/co/market/common/config/InternationalizationConfig.class
 nz/co/market/items/dto/ItemResponse$SellerDto.class
 nz/co/market/chat/entity/Conversation$ConversationBuilder.class
+nz/co/market/items/repository/FavoriteRepository.class
 nz/co/market/orders/entity/Shipment$ShipmentBuilder.class
 nz/co/market/admin/repository/AuditLogRepository.class
 nz/co/market/admin/dto/ReportResponse.class

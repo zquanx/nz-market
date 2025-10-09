@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown, Filter, X } from 'lucide-react';
 import { FilterOptions } from '../types';
 import { categories, conditions } from '../data/mockItems';
+import { getCategoryTranslation, getConditionTranslation } from '../data/categoryTranslations';
 
 interface FilterBarProps {
   filters: FilterOptions;
@@ -96,7 +97,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
             >
               {categories.map(category => (
                 <option key={category} value={category}>
-                  {category}
+                  {getCategoryTranslation(category, language)}
                 </option>
               ))}
             </select>
@@ -110,7 +111,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
               <option value="">{language === 'en' ? 'All Conditions' : '所有成色'}</option>
               {conditions.map(condition => (
                 <option key={condition.value} value={condition.value}>
-                  {condition.label}
+                  {getConditionTranslation(condition.value, language)}
                 </option>
               ))}
             </select>
@@ -177,7 +178,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
                 <div className="flex flex-wrap gap-2">
                   {filters.category !== 'All' && (
                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-100 text-primary-800">
-                      {filters.category}
+                      {getCategoryTranslation(filters.category, language)}
                       <button
                         onClick={() => handleFilterChange('category', 'All')}
                         className="ml-1 text-primary-600 hover:text-primary-800"
@@ -188,7 +189,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
                   )}
                   {filters.condition && (
                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-primary-100 text-primary-800">
-                      {conditions.find(c => c.value === filters.condition)?.label}
+                      {getConditionTranslation(filters.condition, language)}
                       <button
                         onClick={() => handleFilterChange('condition', '')}
                         className="ml-1 text-primary-600 hover:text-primary-800"

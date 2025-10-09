@@ -8,6 +8,8 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import SellPage from './pages/SellPage';
 import ChatPage from './pages/ChatPage';
 import DashboardPage from './pages/DashboardPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import './styles/globals.css';
 
 function App() {
@@ -107,6 +109,14 @@ function App() {
                   onToggleFavorite={handleToggleFavorite} 
                 />
               } 
+            />
+            <Route 
+              path="/login" 
+              element={<LoginPage language={language} />} 
+            />
+            <Route 
+              path="/register" 
+              element={<RegisterPage language={language} />} 
             />
             <Route 
               path="/favorites" 

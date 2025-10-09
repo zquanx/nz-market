@@ -78,7 +78,7 @@ logging:
 # Application specific configuration
 app:
   jwt:
-    secret: ${JWT_SECRET:change_me_in_production}
+    secret: ${JWT_SECRET:Y2hhbmdlX21lX2luX3Byb2R1Y3Rpb25fYW5kX3VzZV9hX3NlY3VyZV9rZXlfaGVyZQ==}
     access-token-expiration: 900000 # 15 minutes
     refresh-token-expiration: 604800000 # 7 days
   

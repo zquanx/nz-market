@@ -4,6 +4,7 @@ import { ArrowRight, Star, TrendingUp, Clock, MapPin } from 'lucide-react';
 import ItemCard from '../components/ItemCard';
 import { mockItems, categories } from '../data/mockItems';
 import { Item } from '../data/mockItems';
+import { getCategoryTranslation } from '../data/categoryTranslations';
 
 interface HomePageProps {
   language: 'en' | 'zh';
@@ -171,7 +172,7 @@ const HomePage: React.FC<HomePageProps> = ({ language, onToggleFavorite }) => {
                   </span>
                 </div>
                 <h3 className="font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
-                  {category}
+                  {getCategoryTranslation(category, language)}
                 </h3>
               </Link>
             ))}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, MessageCircle, Eye, MapPin } from 'lucide-react';
 import { Item } from '../data/mockItems';
+import { getConditionTranslation } from '../data/categoryTranslations';
 
 interface ItemCardProps {
   item: Item;
@@ -29,13 +30,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, language, onToggleFavorite })
   };
 
   const getConditionLabel = (condition: string) => {
-    const labels = {
-      NEW: language === 'en' ? 'New' : '全新',
-      LIKE_NEW: language === 'en' ? 'Like New' : '几乎全新',
-      GOOD: language === 'en' ? 'Good' : '良好',
-      FAIR: language === 'en' ? 'Fair' : '一般'
-    };
-    return labels[condition as keyof typeof labels] || condition;
+    return getConditionTranslation(condition, language);
   };
 
   return (

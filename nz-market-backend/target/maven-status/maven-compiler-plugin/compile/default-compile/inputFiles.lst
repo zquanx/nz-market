@@ -10,6 +10,7 @@
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/chat/repository/MessageRepository.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/admin/controller/AdminController.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/orders/controller/OrderController.java
+/Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/items/repository/FavoriteRepository.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/items/entity/Item.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/auth/dto/LoginRequest.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/auth/entity/EmailVerificationToken.java
@@ -33,8 +34,10 @@
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/items/dto/ItemSearchRequest.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/orders/entity/Shipment.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/auth/security/UserDetailsServiceImpl.java
+/Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/common/config/InternationalizationConfig.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/NzMarketBackendApplication.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/orders/repository/PaymentRepository.java
+/Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/items/entity/Favorite.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/auth/dto/RegisterRequest.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/orders/controller/PaymentController.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/admin/repository/AuditLogRepository.java

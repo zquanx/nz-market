@@ -11,6 +11,8 @@ import nz.co.market.auth.entity.UserProfile;
 import nz.co.market.auth.enums.UserRole;
 import nz.co.market.auth.enums.UserStatus;
 import nz.co.market.auth.repository.UserRepository;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,11 +34,12 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final MessageSource messageSource;
     
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new RuntimeException(messageSource.getMessage("auth.email.exists", null, LocaleContextHolder.getLocale()));
         }
         
         User user = User.builder()
@@ -73,11 +76,14 @@ public class AuthService {
                     )
             );
             
-            User user = (User) authentication.getPrincipal();
+            // Get the actual User entity from the database
+            User user = userRepository.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new RuntimeException(messageSource.getMessage("auth.user.not.found", null, LocaleContextHolder.getLocale())));
+            
             return createAuthResponse(user);
             
         } catch (AuthenticationException e) {
-            throw new RuntimeException("Invalid email or password");
+            throw new RuntimeException(messageSource.getMessage("auth.invalid.credentials", null, LocaleContextHolder.getLocale()));
         }
     }
     
@@ -85,15 +91,15 @@ public class AuthService {
         try {
             String email = jwtService.extractUsername(refreshToken);
             User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> new RuntimeException(messageSource.getMessage("auth.user.not.found", null, LocaleContextHolder.getLocale())));
             
             if (jwtService.validateToken(refreshToken, email)) {
                 return createAuthResponse(user);
             } else {
-                throw new RuntimeException("Invalid refresh token");
+                throw new RuntimeException(messageSource.getMessage("auth.token.invalid", null, LocaleContextHolder.getLocale()));
             }
         } catch (Exception e) {
-            throw new RuntimeException("Invalid refresh token");
+            throw new RuntimeException(messageSource.getMessage("auth.token.invalid", null, LocaleContextHolder.getLocale()));
         }
     }
     
@@ -103,6 +109,24 @@ public class AuthService {
         // For now, we'll just log it
         log.info("Email verification requested for token: {}", token);
         // TODO: Implement email verification logic
+    }
+    
+    public void forgotPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException(messageSource.getMessage("auth.email.not.found", null, LocaleContextHolder.getLocale())));
+        
+        // Generate password reset token
+        String token = UUID.randomUUID().toString();
+        // TODO: Save token to database and send email
+        log.info("Password reset token generated for user {}: {}", email, token);
+    }
+    
+    @Transactional
+    public void resetPassword(String token, String newPassword) {
+        // TODO: Validate token and update password
+        // For now, we'll just log it
+        log.info("Password reset requested for token: {}", token);
+        throw new RuntimeException(messageSource.getMessage("auth.password.reset.invalid", null, LocaleContextHolder.getLocale()));
     }
     
     private AuthResponse createAuthResponse(User user) {

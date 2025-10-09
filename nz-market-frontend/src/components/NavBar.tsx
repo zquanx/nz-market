@@ -115,6 +115,22 @@ const NavBar: React.FC<NavBarProps> = ({ currentLanguage, onLanguageChange }) =>
               </Link>
             </div>
 
+            {/* Auth Buttons */}
+            <div className="hidden md:flex items-center space-x-3 ml-4">
+              <Link
+                to="/login"
+                className="text-gray-700 hover:text-primary-600 font-medium transition-colors"
+              >
+                {currentLanguage === 'en' ? 'Login' : '登录'}
+              </Link>
+              <Link
+                to="/register"
+                className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors font-medium"
+              >
+                {currentLanguage === 'en' ? 'Register' : '注册'}
+              </Link>
+            </div>
+
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -180,6 +196,22 @@ const NavBar: React.FC<NavBarProps> = ({ currentLanguage, onLanguageChange }) =>
               >
                 {currentLanguage === 'en' ? 'Profile' : '个人资料'}
               </Link>
+              <div className="pt-4 border-t border-gray-200">
+                <Link
+                  to="/login"
+                  className="block text-gray-700 hover:text-primary-600 font-medium transition-colors mb-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {currentLanguage === 'en' ? 'Login' : '登录'}
+                </Link>
+                <Link
+                  to="/register"
+                  className="block bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors font-medium text-center"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {currentLanguage === 'en' ? 'Register' : '注册'}
+                </Link>
+              </div>
             </div>
           </div>
         )}
