@@ -17,10 +17,34 @@ const LoginPage: React.FC<LoginPageProps> = ({ language }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const validateForm = () => {
+    const errors: string[] = [];
+    
+    if (!formData.email.trim()) {
+      errors.push(language === 'en' ? 'Email is required' : '邮箱地址不能为空');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.push(language === 'en' ? 'Invalid email format' : '邮箱格式不正确');
+    }
+    
+    if (!formData.password) {
+      errors.push(language === 'en' ? 'Password is required' : '密码不能为空');
+    }
+    
+    return errors;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+
+    // Client-side validation
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setError(validationErrors[0]);
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:8080/api/auth/login', {

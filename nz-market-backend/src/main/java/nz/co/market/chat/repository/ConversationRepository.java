@@ -13,23 +13,12 @@ import java.util.UUID;
 @Repository
 public interface ConversationRepository extends JpaRepository<Conversation, UUID> {
     
-    @Query("SELECT c FROM Conversation c WHERE " +
-           "(c.buyer.id = :userId OR c.seller.id = :userId) " +
-           "ORDER BY c.lastMessageAt DESC NULLS LAST, c.createdAt DESC")
-    List<Conversation> findByUserIdOrderByLastMessageAtDesc(@Param("userId") UUID userId);
+    @Query("SELECT c FROM Conversation c WHERE c.item.id = :itemId AND c.buyerId = :buyerId AND c.sellerId = :sellerId")
+    Optional<Conversation> findByItemIdAndBuyerIdAndSellerId(@Param("itemId") UUID itemId, 
+                                                             @Param("buyerId") UUID buyerId, 
+                                                             @Param("sellerId") UUID sellerId);
     
-    @Query("SELECT c FROM Conversation c WHERE " +
-           "c.item.id = :itemId AND " +
-           "((c.buyer.id = :buyerId AND c.seller.id = :sellerId) OR " +
-           "(c.buyer.id = :sellerId AND c.seller.id = :buyerId))")
-    Optional<Conversation> findByItemIdAndBuyerIdAndSellerId(
-            @Param("itemId") UUID itemId,
-            @Param("buyerId") UUID buyerId,
-            @Param("sellerId") UUID sellerId
-    );
-    
-    @Query("SELECT c FROM Conversation c WHERE " +
-           "c.id = :conversationId AND " +
-           "(c.buyer.id = :userId OR c.seller.id = :userId)")
-    Optional<Conversation> findByIdAndUserId(@Param("conversationId") UUID conversationId, @Param("userId") UUID userId);
+    @Query("SELECT c FROM Conversation c WHERE (c.buyerId = :userId OR c.sellerId = :userId) ORDER BY c.lastMessageAt DESC")
+    List<Conversation> findByBuyerIdOrSellerIdOrderByLastMessageAtDesc(@Param("userId") UUID userId, 
+                                                                       @Param("userId") UUID userId2);
 }

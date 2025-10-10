@@ -24,7 +24,7 @@
     "test:clean": "rm -rf test-results/ && rm -rf playwright-report/"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.56.0"
   },
   "keywords": [
     "playwright",

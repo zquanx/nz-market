@@ -142,6 +142,61 @@ public class ItemService {
     }
     
     @Transactional
+    public ItemResponse updateItem(UUID itemId, CreateItemRequest request, User user) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("Item not found"));
+        
+        // Check if user is authorized to update this item
+        if (!item.getSeller().getId().equals(user.getId()) && !user.getRole().name().equals("ADMIN")) {
+            throw new RuntimeException("Not authorized to update this item");
+        }
+        
+        // Update item fields
+        item.setTitle(request.getTitle());
+        item.setDescription(request.getDescription());
+        item.setPriceNzd(request.getPriceNzd());
+        item.setCondition(request.getCondition());
+        item.setQuantity(request.getQuantity());
+        item.setTradeMethod(request.getTradeMethod());
+        item.setLocationCity(request.getLocationCity());
+        item.setLat(request.getLat());
+        item.setLng(request.getLng());
+        
+        // Update category if provided
+        if (request.getCategoryId() != null) {
+            Category category = categoryRepository.findById(request.getCategoryId())
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+            item.setCategory(category);
+        }
+        
+        // Update tags if provided
+        if (request.getTagIds() != null && !request.getTagIds().isEmpty()) {
+            List<Tag> tags = tagRepository.findAllById(request.getTagIds());
+            item.setTags(tags);
+        }
+        
+        // Update images if provided
+        if (request.getImageUrls() != null && !request.getImageUrls().isEmpty()) {
+            // Clear existing images
+            item.getImages().clear();
+            
+            // Add new images
+            final Item finalItem = item;
+            List<ItemImage> images = request.getImageUrls().stream()
+                    .map(url -> ItemImage.builder()
+                            .item(finalItem)
+                            .url(url)
+                            .sortOrder(request.getImageUrls().indexOf(url))
+                            .build())
+                    .collect(Collectors.toList());
+            item.setImages(images);
+        }
+        
+        item = itemRepository.save(item);
+        return itemMapper.toResponse(item);
+    }
+    
+    @Transactional
     public void deleteItem(UUID itemId, User user) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("Item not found"));

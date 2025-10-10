@@ -83,6 +83,19 @@ public class ItemController {
         return ResponseEntity.ok(response);
     }
     
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
+    @Operation(summary = "Update item")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<ItemResponse> updateItem(
+            @PathVariable UUID id,
+            @Valid @RequestBody CreateItemRequest request,
+            @AuthenticationPrincipal User user) {
+        log.info("Updating item: {} by user: {}", id, user.getEmail());
+        ItemResponse response = itemService.updateItem(id, request, user);
+        return ResponseEntity.ok(response);
+    }
+    
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Delete item")

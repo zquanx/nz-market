@@ -11,6 +11,9 @@ public class CreateConversationRequest {
     @NotNull(message = "Item ID is required")
     private UUID itemId;
     
-    @NotNull(message = "Peer user ID is required")
-    private UUID peerUserId;
+    @NotNull(message = "Buyer ID is required")
+    private UUID buyerId;
+    
+    @NotNull(message = "Seller ID is required")
+    private UUID sellerId;
 }

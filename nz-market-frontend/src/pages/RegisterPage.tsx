@@ -21,13 +21,41 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ language }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const validateForm = () => {
+    const errors: string[] = [];
+    
+    if (!formData.displayName.trim()) {
+      errors.push(language === 'en' ? 'Display name is required' : '显示名称不能为空');
+    }
+    
+    if (!formData.email.trim()) {
+      errors.push(language === 'en' ? 'Email is required' : '邮箱地址不能为空');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.push(language === 'en' ? 'Invalid email format' : '邮箱格式不正确');
+    }
+    
+    if (!formData.password) {
+      errors.push(language === 'en' ? 'Password is required' : '密码不能为空');
+    } else if (formData.password.length < 6) {
+      errors.push(language === 'en' ? 'Password must be at least 6 characters' : '密码至少需要6个字符');
+    }
+    
+    if (formData.password !== formData.confirmPassword) {
+      errors.push(language === 'en' ? 'Passwords do not match' : '密码不匹配');
+    }
+    
+    return errors;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
-    if (formData.password !== formData.confirmPassword) {
-      setError(parseApiError('passwords.not.match', language));
+    // Client-side validation
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setError(validationErrors[0]);
       setIsLoading(false);
       return;
     }

@@ -1,4 +1,5 @@
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/items/entity/ItemImage.java
+/Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/chat/repository/ChatMessageRepository.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/auth/service/AuthService.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/auth/dto/AuthResponse.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/items/entity/Tag.java
@@ -9,6 +10,7 @@
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/items/enums/TradeMethod.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/chat/repository/MessageRepository.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/admin/controller/AdminController.java
+/Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/chat/dto/ChatMessageRequest.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/orders/controller/OrderController.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/items/repository/FavoriteRepository.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/items/entity/Item.java
@@ -37,6 +39,7 @@
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/common/config/InternationalizationConfig.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/NzMarketBackendApplication.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/orders/repository/PaymentRepository.java
+/Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/chat/dto/ChatMessageResponse.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/items/entity/Favorite.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/auth/dto/RegisterRequest.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/orders/controller/PaymentController.java
@@ -63,6 +66,7 @@
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/admin/entity/Report.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/orders/dto/PaymentIntentResponse.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/chat/entity/Conversation.java
+/Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/chat/entity/ChatMessage.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/chat/service/ChatService.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/uploads/dto/PresignResponse.java
 /Users/blue/IdeaProjects/nz-market/nz-market-backend/src/main/java/nz/co/market/items/dto/ItemResponse.java

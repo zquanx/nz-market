@@ -3,26 +3,26 @@ package nz.co.market.chat.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nz.co.market.auth.entity.User;
-import nz.co.market.chat.dto.*;
+import nz.co.market.chat.dto.ChatMessageRequest;
+import nz.co.market.chat.dto.ChatMessageResponse;
+import nz.co.market.chat.dto.ConversationResponse;
+import nz.co.market.chat.dto.CreateConversationRequest;
 import nz.co.market.chat.entity.Conversation;
-import nz.co.market.chat.entity.Message;
-import nz.co.market.chat.mapper.ChatMapper;
+import nz.co.market.chat.entity.ChatMessage;
 import nz.co.market.chat.repository.ConversationRepository;
-import nz.co.market.chat.repository.MessageRepository;
+import nz.co.market.chat.repository.ChatMessageRepository;
 import nz.co.market.items.entity.Item;
 import nz.co.market.items.repository.ItemRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,101 +30,129 @@ import java.util.UUID;
 public class ChatService {
     
     private final ConversationRepository conversationRepository;
-    private final MessageRepository messageRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final ItemRepository itemRepository;
-    private final ChatMapper chatMapper;
-    private final SimpMessagingTemplate messagingTemplate;
-    
-    @Transactional(readOnly = true)
-    public List<ConversationResponse> getUserConversations(UUID userId) {
-        List<Conversation> conversations = conversationRepository.findByUserIdOrderByLastMessageAtDesc(userId);
-        return conversations.stream()
-                .map(conv -> chatMapper.toConversationResponse(conv, userId))
-                .toList();
-    }
     
     @Transactional
-    public ConversationResponse createConversation(CreateConversationRequest request, User currentUser) {
+    public ConversationResponse createConversation(CreateConversationRequest request, User user) {
+        // Find the item
         Item item = itemRepository.findById(request.getItemId())
                 .orElseThrow(() -> new RuntimeException("Item not found"));
         
-        User peerUser = item.getSeller();
-        if (peerUser.getId().equals(currentUser.getId())) {
-            throw new RuntimeException("Cannot create conversation with yourself");
-        }
-        
         // Check if conversation already exists
-        Optional<Conversation> existingConversation = conversationRepository
-                .findByItemIdAndBuyerIdAndSellerId(request.getItemId(), currentUser.getId(), peerUser.getId());
+        Conversation existingConversation = conversationRepository
+                .findByItemIdAndBuyerIdAndSellerId(request.getItemId(), request.getBuyerId(), request.getSellerId())
+                .orElse(null);
         
-        if (existingConversation.isPresent()) {
-            return chatMapper.toConversationResponse(existingConversation.get(), currentUser.getId());
+        if (existingConversation != null) {
+            return mapToConversationResponse(existingConversation);
         }
         
+        // Create new conversation
         Conversation conversation = Conversation.builder()
                 .item(item)
-                .buyer(currentUser)
-                .seller(peerUser)
+                .buyerId(request.getBuyerId())
+                .sellerId(request.getSellerId())
+                .createdAt(ZonedDateTime.now())
+                .lastMessageAt(ZonedDateTime.now())
                 .build();
         
         conversation = conversationRepository.save(conversation);
-        return chatMapper.toConversationResponse(conversation, currentUser.getId());
+        return mapToConversationResponse(conversation);
     }
     
     @Transactional(readOnly = true)
-    public Page<MessageResponse> getConversationMessages(UUID conversationId, UUID userId, int page, int size) {
-        Conversation conversation = conversationRepository.findByIdAndUserId(conversationId, userId)
+    public List<ConversationResponse> getUserConversations(UUID userId) {
+        List<Conversation> conversations = conversationRepository.findByBuyerIdOrSellerIdOrderByLastMessageAtDesc(userId, userId);
+        return conversations.stream()
+                .map(this::mapToConversationResponse)
+                .collect(Collectors.toList());
+    }
+    
+    @Transactional(readOnly = true)
+    public Page<ChatMessageResponse> getConversationMessages(UUID conversationId, UUID userId, int page, int size) {
+        // Verify user has access to this conversation
+        Conversation conversation = conversationRepository.findById(conversationId)
                 .orElseThrow(() -> new RuntimeException("Conversation not found"));
         
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Message> messages = messageRepository.findByConversationIdOrderByCreatedAtDesc(conversationId, pageable);
+        if (!conversation.getBuyerId().equals(userId) && !conversation.getSellerId().equals(userId)) {
+            throw new RuntimeException("Not authorized to view this conversation");
+        }
         
-        return messages.map(chatMapper::toMessageResponse);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ChatMessage> messages = chatMessageRepository.findByConversationIdOrderByCreatedAtAsc(conversationId, pageable);
+        
+        return messages.map(this::mapToMessageResponse);
     }
     
     @Transactional
-    public MessageResponse sendMessage(UUID conversationId, SendMessageRequest request, User sender) {
-        Conversation conversation = conversationRepository.findByIdAndUserId(conversationId, sender.getId())
+    public ChatMessageResponse sendMessage(UUID conversationId, ChatMessageRequest request, User user) {
+        // Verify user has access to this conversation
+        Conversation conversation = conversationRepository.findById(conversationId)
                 .orElseThrow(() -> new RuntimeException("Conversation not found"));
         
-        Message message = Message.builder()
+        if (!conversation.getBuyerId().equals(user.getId()) && !conversation.getSellerId().equals(user.getId())) {
+            throw new RuntimeException("Not authorized to send messages in this conversation");
+        }
+        
+        // Create message
+        ChatMessage message = ChatMessage.builder()
                 .conversation(conversation)
-                .sender(sender)
-                .type(request.getType())
+                .senderId(user.getId())
                 .content(request.getContent())
+                .messageType(request.getMessageType())
+                .imageUrl(request.getImageUrl())
+                .createdAt(ZonedDateTime.now())
                 .build();
         
-        message = messageRepository.save(message);
+        message = chatMessageRepository.save(message);
         
         // Update conversation last message time
         conversation.setLastMessageAt(ZonedDateTime.now());
         conversationRepository.save(conversation);
         
-        // Send WebSocket message
-        MessageResponse messageResponse = chatMapper.toMessageResponse(message);
-        messagingTemplate.convertAndSend("/topic/conversations/" + conversationId, messageResponse);
-        
-        log.info("Message sent in conversation {} by user {}", conversationId, sender.getId());
-        return messageResponse;
+        return mapToMessageResponse(message);
     }
     
     @Transactional
-    public void markMessagesAsRead(UUID conversationId, UUID userId) {
-        Conversation conversation = conversationRepository.findByIdAndUserId(conversationId, userId)
+    public void markConversationAsRead(UUID conversationId, UUID userId) {
+        Conversation conversation = conversationRepository.findById(conversationId)
                 .orElseThrow(() -> new RuntimeException("Conversation not found"));
         
-        List<Message> unreadMessages = messageRepository.findUnreadMessages(conversationId, userId);
+        if (!conversation.getBuyerId().equals(userId) && !conversation.getSellerId().equals(userId)) {
+            throw new RuntimeException("Not authorized to modify this conversation");
+        }
         
-        ZonedDateTime now = ZonedDateTime.now();
-        unreadMessages.forEach(message -> message.setReadAt(now));
-        messageRepository.saveAll(unreadMessages);
-        
-        log.info("Marked {} messages as read in conversation {} for user {}", 
-                unreadMessages.size(), conversationId, userId);
+        // Mark messages as read
+        List<ChatMessage> unreadMessages = chatMessageRepository.findUnreadMessagesInConversation(conversationId, userId);
+        for (ChatMessage message : unreadMessages) {
+            message.setReadAt(ZonedDateTime.now());
+        }
+        chatMessageRepository.saveAll(unreadMessages);
     }
     
-    @Transactional(readOnly = true)
-    public Long getUnreadMessageCount(UUID conversationId, UUID userId) {
-        return messageRepository.countUnreadMessages(conversationId, userId);
+    private ConversationResponse mapToConversationResponse(Conversation conversation) {
+        return ConversationResponse.builder()
+                .id(conversation.getId())
+                .itemId(conversation.getItem().getId())
+                .itemTitle(conversation.getItem().getTitle())
+                .buyerId(conversation.getBuyerId())
+                .sellerId(conversation.getSellerId())
+                .createdAt(conversation.getCreatedAt())
+                .lastMessageAt(conversation.getLastMessageAt())
+                .build();
+    }
+    
+    private ChatMessageResponse mapToMessageResponse(ChatMessage message) {
+        return ChatMessageResponse.builder()
+                .id(message.getId())
+                .conversationId(message.getConversation().getId())
+                .senderId(message.getSenderId())
+                .content(message.getContent())
+                .messageType(message.getMessageType())
+                .imageUrl(message.getImageUrl())
+                .createdAt(message.getCreatedAt())
+                .readAt(message.getReadAt())
+                .build();
     }
 }

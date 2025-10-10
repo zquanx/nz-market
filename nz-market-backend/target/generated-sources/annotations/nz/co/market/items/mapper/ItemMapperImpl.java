@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-09T21:28:42+1300",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
+    date = "2025-10-10T14:30:09+1300",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.44.0.v20251001-1143, environment: Java 21.0.8 (Eclipse Adoptium)"
 )
 @Component
 public class ItemMapperImpl implements ItemMapper {
@@ -30,23 +30,23 @@ public class ItemMapperImpl implements ItemMapper {
 
         itemResponse.seller( userToSellerDto( item.getSeller() ) );
         itemResponse.category( categoryToCategoryDto( item.getCategory() ) );
-        itemResponse.id( item.getId() );
-        itemResponse.title( item.getTitle() );
-        itemResponse.description( item.getDescription() );
-        itemResponse.priceNzd( item.getPriceNzd() );
-        itemResponse.currency( item.getCurrency() );
         itemResponse.condition( item.getCondition() );
-        itemResponse.quantity( item.getQuantity() );
-        itemResponse.status( item.getStatus() );
-        itemResponse.tradeMethod( item.getTradeMethod() );
-        itemResponse.locationCity( item.getLocationCity() );
+        itemResponse.createdAt( item.getCreatedAt() );
+        itemResponse.currency( item.getCurrency() );
+        itemResponse.description( item.getDescription() );
+        itemResponse.id( item.getId() );
+        itemResponse.images( itemImageListToImageDtoList( item.getImages() ) );
         itemResponse.lat( item.getLat() );
         itemResponse.lng( item.getLng() );
-        itemResponse.viewCount( item.getViewCount() );
-        itemResponse.createdAt( item.getCreatedAt() );
-        itemResponse.updatedAt( item.getUpdatedAt() );
+        itemResponse.locationCity( item.getLocationCity() );
+        itemResponse.priceNzd( item.getPriceNzd() );
+        itemResponse.quantity( item.getQuantity() );
+        itemResponse.status( item.getStatus() );
         itemResponse.tags( tagListToTagDtoList( item.getTags() ) );
-        itemResponse.images( itemImageListToImageDtoList( item.getImages() ) );
+        itemResponse.title( item.getTitle() );
+        itemResponse.tradeMethod( item.getTradeMethod() );
+        itemResponse.updatedAt( item.getUpdatedAt() );
+        itemResponse.viewCount( item.getViewCount() );
 
         return itemResponse.build();
     }
@@ -95,6 +95,33 @@ public class ItemMapperImpl implements ItemMapper {
         return categoryDto.build();
     }
 
+    protected ItemResponse.ImageDto itemImageToImageDto(ItemImage itemImage) {
+        if ( itemImage == null ) {
+            return null;
+        }
+
+        ItemResponse.ImageDto.ImageDtoBuilder imageDto = ItemResponse.ImageDto.builder();
+
+        imageDto.id( itemImage.getId() );
+        imageDto.sortOrder( itemImage.getSortOrder() );
+        imageDto.url( itemImage.getUrl() );
+
+        return imageDto.build();
+    }
+
+    protected List<ItemResponse.ImageDto> itemImageListToImageDtoList(List<ItemImage> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<ItemResponse.ImageDto> list1 = new ArrayList<ItemResponse.ImageDto>( list.size() );
+        for ( ItemImage itemImage : list ) {
+            list1.add( itemImageToImageDto( itemImage ) );
+        }
+
+        return list1;
+    }
+
     protected ItemResponse.TagDto tagToTagDto(Tag tag) {
         if ( tag == null ) {
             return null;
@@ -117,33 +144,6 @@ public class ItemMapperImpl implements ItemMapper {
         List<ItemResponse.TagDto> list1 = new ArrayList<ItemResponse.TagDto>( list.size() );
         for ( Tag tag : list ) {
             list1.add( tagToTagDto( tag ) );
-        }
-
-        return list1;
-    }
-
-    protected ItemResponse.ImageDto itemImageToImageDto(ItemImage itemImage) {
-        if ( itemImage == null ) {
-            return null;
-        }
-
-        ItemResponse.ImageDto.ImageDtoBuilder imageDto = ItemResponse.ImageDto.builder();
-
-        imageDto.id( itemImage.getId() );
-        imageDto.url( itemImage.getUrl() );
-        imageDto.sortOrder( itemImage.getSortOrder() );
-
-        return imageDto.build();
-    }
-
-    protected List<ItemResponse.ImageDto> itemImageListToImageDtoList(List<ItemImage> list) {
-        if ( list == null ) {
-            return null;
-        }
-
-        List<ItemResponse.ImageDto> list1 = new ArrayList<ItemResponse.ImageDto>( list.size() );
-        for ( ItemImage itemImage : list ) {
-            list1.add( itemImageToImageDto( itemImage ) );
         }
 
         return list1;

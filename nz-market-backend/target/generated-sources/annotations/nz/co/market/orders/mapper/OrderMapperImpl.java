@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-09T21:28:42+1300",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
+    date = "2025-10-10T14:30:09+1300",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.44.0.v20251001-1143, environment: Java 21.0.8 (Eclipse Adoptium)"
 )
 @Component
 public class OrderMapperImpl implements OrderMapper {
@@ -23,12 +23,12 @@ public class OrderMapperImpl implements OrderMapper {
 
         OrderResponse.OrderResponseBuilder orderResponse = OrderResponse.builder();
 
+        orderResponse.createdAt( order.getCreatedAt() );
+        orderResponse.escrow( order.getEscrow() );
         orderResponse.id( order.getId() );
         orderResponse.priceAtOrder( order.getPriceAtOrder() );
-        orderResponse.status( order.getStatus() );
-        orderResponse.escrow( order.getEscrow() );
         orderResponse.shippingAddressId( order.getShippingAddressId() );
-        orderResponse.createdAt( order.getCreatedAt() );
+        orderResponse.status( order.getStatus() );
         orderResponse.updatedAt( order.getUpdatedAt() );
 
         orderResponse.currency( "NZD" );
@@ -46,10 +46,10 @@ public class OrderMapperImpl implements OrderMapper {
 
         paymentDto.provider( payment.getProvider() );
         paymentDto.status( payment.getStatus() );
-        paymentDto.id( payment.getId() );
         paymentDto.amount( payment.getAmount() );
-        paymentDto.currency( payment.getCurrency() );
         paymentDto.createdAt( payment.getCreatedAt() );
+        paymentDto.currency( payment.getCurrency() );
+        paymentDto.id( payment.getId() );
 
         return paymentDto.build();
     }
@@ -63,11 +63,11 @@ public class OrderMapperImpl implements OrderMapper {
         OrderResponse.ShipmentDto.ShipmentDtoBuilder shipmentDto = OrderResponse.ShipmentDto.builder();
 
         shipmentDto.status( shipment.getStatus() );
-        shipmentDto.id( shipment.getId() );
         shipmentDto.carrier( shipment.getCarrier() );
-        shipmentDto.trackingNo( shipment.getTrackingNo() );
-        shipmentDto.shippedAt( shipment.getShippedAt() );
         shipmentDto.deliveredAt( shipment.getDeliveredAt() );
+        shipmentDto.id( shipment.getId() );
+        shipmentDto.shippedAt( shipment.getShippedAt() );
+        shipmentDto.trackingNo( shipment.getTrackingNo() );
 
         return shipmentDto.build();
     }

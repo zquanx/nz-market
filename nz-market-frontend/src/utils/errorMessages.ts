@@ -8,6 +8,7 @@ export const errorMessages = {
     'validation.password.size': 'Password must be at least 6 characters',
     'validation.displayName.required': 'Display name is required',
     'validation.displayName.size': 'Display name must be between 2 and 100 characters',
+    'validation.phone.invalid': 'Invalid phone number format',
     
     // Authentication errors
     'auth.email.exists': 'Email already exists',
@@ -43,6 +44,7 @@ export const errorMessages = {
     'validation.password.size': '密码至少需要6个字符',
     'validation.displayName.required': '显示名称不能为空',
     'validation.displayName.size': '显示名称必须在2-100个字符之间',
+    'validation.phone.invalid': '手机号码格式不正确',
     
     // Authentication errors
     'auth.email.exists': '邮箱地址已存在',
@@ -83,17 +85,33 @@ export const parseApiError = (errorData: any, language: 'en' | 'zh'): string => 
     // Check if it's a validation error with field-specific messages
     const fieldErrors = Object.values(errorData);
     if (fieldErrors.length > 0) {
-      return Array.isArray(fieldErrors) ? fieldErrors[0] as string : fieldErrors[0] as string;
+      const firstError = Array.isArray(fieldErrors) ? fieldErrors[0] : fieldErrors[0];
+      if (typeof firstError === 'string') {
+        return firstError;
+      }
     }
     
     // Check for direct error message
     if (errorData.error) {
-      return getErrorMessage(errorData.error, language);
+      // Handle both string errors and error objects
+      if (typeof errorData.error === 'string') {
+        return getErrorMessage(errorData.error, language);
+      } else if (typeof errorData.error === 'object') {
+        const errorValues = Object.values(errorData.error);
+        if (errorValues.length > 0) {
+          return errorValues[0] as string;
+        }
+      }
     }
     
     if (errorData.message) {
       return getErrorMessage(errorData.message, language);
     }
+    
+    // Check for specific field errors
+    if (errorData.email) return errorData.email;
+    if (errorData.password) return errorData.password;
+    if (errorData.displayName) return errorData.displayName;
   }
   
   // Handle string errors

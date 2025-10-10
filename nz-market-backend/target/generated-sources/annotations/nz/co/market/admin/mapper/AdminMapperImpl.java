@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-09T21:28:43+1300",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
+    date = "2025-10-10T14:30:10+1300",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.44.0.v20251001-1143, environment: Java 21.0.8 (Eclipse Adoptium)"
 )
 @Component
 public class AdminMapperImpl implements AdminMapper {
@@ -24,14 +24,14 @@ public class AdminMapperImpl implements AdminMapper {
 
         reportResponse.reporter( userToReporterDto( report.getReporter() ) );
         reportResponse.resolvedBy( userToUserDto( report.getResolvedBy() ) );
-        reportResponse.id( report.getId() );
-        reportResponse.targetType( report.getTargetType() );
-        reportResponse.targetId( report.getTargetId() );
-        reportResponse.reason( report.getReason() );
-        reportResponse.status( report.getStatus() );
         reportResponse.createdAt( report.getCreatedAt() );
-        reportResponse.resolvedAt( report.getResolvedAt() );
+        reportResponse.id( report.getId() );
+        reportResponse.reason( report.getReason() );
         reportResponse.resolutionNotes( report.getResolutionNotes() );
+        reportResponse.resolvedAt( report.getResolvedAt() );
+        reportResponse.status( report.getStatus() );
+        reportResponse.targetId( report.getTargetId() );
+        reportResponse.targetType( report.getTargetType() );
 
         return reportResponse.build();
     }

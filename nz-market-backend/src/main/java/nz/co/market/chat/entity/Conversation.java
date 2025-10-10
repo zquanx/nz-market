@@ -27,18 +27,16 @@ public class Conversation extends BaseEntity {
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "buyer_id", nullable = false)
-    private User buyer;
+    @Column(name = "buyer_id", nullable = false)
+    private java.util.UUID buyerId;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id", nullable = false)
-    private User seller;
+    @Column(name = "seller_id", nullable = false)
+    private java.util.UUID sellerId;
     
     @Column(name = "last_message_at")
     private ZonedDateTime lastMessageAt;
     
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
-    private List<Message> messages = new ArrayList<>();
+    private List<ChatMessage> messages = new ArrayList<>();
 }
